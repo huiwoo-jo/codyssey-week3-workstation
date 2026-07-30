@@ -29,7 +29,6 @@ def decide_winner(score_cross, score_x):
     else:
         return "X"
     
-
 def normalize_label(label_str):
     """
     입력된 라벨을 표준 라벨(Cross, X)로 정규화합니다.
@@ -51,3 +50,66 @@ def validate_dimensions(matrix, expected_size):
         if len(row) != expected_size:
             return False
     return True
+
+def input_matrix_3x3(prompt_name):
+    """
+    3x3 행렬을 사용자 콘솔에서 한 줄씩 입력받고 유효성을 검증합니다.
+    """
+    print(f"\n{prompt_name} (3줄 입력, 공백 구분)")
+    while True:
+        matrix = []
+        valid = True
+        for i in range(3):
+            line = input().strip()
+            parts = line.split()
+            if len(parts) != 3:
+                print("입력 형식 오류: 각 줄에 3개의 숫자를 공백으로 구분해 입력하세요.")
+                valid = False
+                break
+            try:
+                row = [float(x) for x in parts]
+                matrix.append(row)
+            except ValueError:
+                print("입력 형식 오류: 숫자가 아닌 값이 포함되어 있습니다.")
+                valid = False
+                break
+        if valid and len(matrix) == 3:
+            return matrix
+
+def run_mode_1():
+    print("\n#----------------------------------------")
+    print("# [1] 필터 입력")
+    print("#----------------------------------------")
+    filter_a = input_matrix_3x3("필터 A")
+    filter_b = input_matrix_3x3("필터 B")
+
+    print("\n#----------------------------------------")
+    print("# [2] 패턴 입력")
+    print("#----------------------------------------")
+    pattern = input_matrix_3x3("패턴")
+
+    print("\n#----------------------------------------")
+    print("# [3] MAC 결과")
+    print("#----------------------------------------")
+    
+    # 10회 반복 측정하여 I/O 제외 연산 평균 시간 측정
+    iterations = 10
+    start_t = time.perf_counter()
+    for _ in range(iterations):
+        score_a = compute_mac(pattern, filter_a)
+        score_b = compute_mac(pattern, filter_b)
+    end_t = time.perf_counter()
+    
+    avg_time_ms = ((end_t - start_t) / iterations) * 1000.0
+    
+    print(f"A 점수: {score_a}")
+    print(f"B 점수: {score_b}")
+    print(f"연산 시간(평균/10회): {avg_time_ms:.3f} ms")
+    
+    diff = abs(score_a - score_b)
+    if diff < EPSILON:
+        print(f"판정: 판정 불가 (|A-B| < 1e-9)")
+    elif score_a > score_b:
+        print("판정: A")
+    else:
+        print("판정: B")
