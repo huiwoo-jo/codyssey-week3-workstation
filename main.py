@@ -125,3 +125,89 @@ def load_json_data(filepath="data.json"):
     except Exception as e:
         print(f"파일 로드 실패: {e}")
         return None
+    
+def process_data_json_cases(data):
+    filters_dict = data.get("filters", {})
+    patterns_dict = data.get("patterns", {})
+
+    print("\n#---------------------------------------")
+    print("# [1] 필터 로드")
+    print("#---------------------------------------")
+    for size_key in filters_dict:
+        print(f"✓ {size_key:<7} 필터 로드 완료 (Cross, X)")
+
+    print("\n#---------------------------------------")
+    print("# [2] 패턴 분석 (라벨 정규화 적용)")
+    print("#---------------------------------------")
+
+    results = []
+    
+    for case_id, pattern_info in patterns_dict.items():
+        # 키 예시: size_5_1 -> N = 5 추출
+        try:
+            size_str = case_id.split("_")[1]
+            N = int(size_str)
+        except Exception:
+            results.append({
+                "id": case_id,
+                "status": "FAIL",
+                "reason": "키에서 크기 N을 추출할 수 없음"
+            })
+            continue
+
+        filter_group_key = f"size_{N}"
+        if filter_group_key not in filters_dict:
+            results.append({
+                "id": case_id,
+                "status": "FAIL",
+                "reason": f"크기 {N}에 해당하는 필터가 없음"
+            })
+            continue
+
+        cross_filter = filters_dict[filter_group_key].get("cross")
+        x_filter = filters_dict[filter_group_key].get("x")
+        pattern_input = pattern_info.get("input")
+        expected_raw = pattern_info.get("expected")
+        expected = normalize_label(expected_raw)
+
+        # 행렬 검증
+        if not (validate_dimensions(pattern_input, N) and 
+                validate_dimensions(cross_filter, N) and 
+                validate_dimensions(x_filter, N)):
+            print(f"- -- {case_id} --- FAIL (크기/스키마 불일치)")
+            results.append({
+                "id": case_id,
+                "status": "FAIL",
+                "reason": f"크기 불일치 (예상: {N}x{N})"
+            })
+            continue
+
+        score_cross = compute_mac(pattern_input, cross_filter)
+        score_x = compute_mac(pattern_input, x_filter)
+        
+        predicted = decide_winner(score_cross, score_x)
+
+        if predicted == expected:
+            status = "PASS"
+            reason = ""
+        else:
+            status = "FAIL"
+            if predicted == "UNDECIDED":
+                reason = "동점(UNDECIDED) 처리 규칙에 따라 FAIL"
+            else:
+                reason = f"예측값({predicted})과 기댓값({expected}) 불일치"
+
+        print(f"- -- {case_id} ---")
+        print(f"Cross 점수: {score_cross}")
+        print(f"X 점수: {score_x}")
+        print(f"판정: {predicted} | expected: {expected} | {status}")
+
+        results.append({
+            "id": case_id,
+            "status": status,
+            "predicted": predicted,
+            "expected": expected,
+            "reason": reason
+        })
+
+    return results, filters_dict
