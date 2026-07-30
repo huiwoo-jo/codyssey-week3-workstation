@@ -358,6 +358,37 @@ def generate_pattern(N, pattern_type="Cross"):
 
     return matrix
 
+def run_pattern_generator_cli():
+    print("\n#---------------------------------------")
+    print("# [추가 과제 2] N x N 패턴 자동 생성기")
+    print("#---------------------------------------")
+    try:
+        N = int(input("생성할 패턴 크기 N 입력 (예: 5): ").strip())
+        if N < 3:
+            print("크기 N은 최소 3 이상이어야 합니다.")
+            return
+    except ValueError:
+        print("유효한 숫자를 입력하세요.")
+        return
+
+    cross_p = generate_pattern(N, "Cross")
+    x_p = generate_pattern(N, "X")
+
+    print(f"\n[생성된 {N}x{N} Cross 패턴]")
+    for row in cross_p:
+        print(" ".join(f"{int(v)}" for v in row))
+
+    print(f"\n[생성된 {N}x{N} X 패턴]")
+    for row in x_p:
+        print(" ".join(f"{int(v)}" for v in row))
+
+    # 생성한 패턴으로 MAC 점수 테스트 연결
+    score_cross = compute_mac(cross_p, cross_p)
+    score_x = compute_mac(cross_p, x_p)
+    print(f"\n- Cross 필터와 Cross 패턴 MAC 점수: {score_cross}")
+    print(f"- X 필터와 Cross 패턴 MAC 점수    : {score_x}")
+    print(f"- 자동 판정 결과                : {decide_winner(score_cross, score_x)}")
+
 def main():
     print("=== Mini NPU Simulator ===")
     print("\n[모드 선택]")
