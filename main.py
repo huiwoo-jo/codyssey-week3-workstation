@@ -28,3 +28,26 @@ def decide_winner(score_cross, score_x):
         return "Cross"
     else:
         return "X"
+    
+
+def normalize_label(label_str):
+    """
+    입력된 라벨을 표준 라벨(Cross, X)로 정규화합니다.
+    """
+    s = str(label_str).strip().lower()
+    if s in ['+', 'cross']:
+        return "Cross"
+    elif s in ['x']:
+        return "X"
+    return label_str  # 매칭되지 않으면 원본 반환
+
+def validate_dimensions(matrix, expected_size):
+    """
+    행렬의 행/열 크기가 expected_size x expected_size와 일치하는지 검증합니다.
+    """
+    if len(matrix) != expected_size:
+        return False
+    for row in matrix:
+        if len(row) != expected_size:
+            return False
+    return True
