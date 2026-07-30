@@ -113,3 +113,15 @@ def run_mode_1():
         print("판정: A")
     else:
         print("판정: B")
+
+def load_json_data(filepath="data.json"):
+    """
+    json 파일을 로드하고 스키마 기본 구조를 반환합니다.
+    """
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+    except Exception as e:
+        print(f"파일 로드 실패: {e}")
+        return None
