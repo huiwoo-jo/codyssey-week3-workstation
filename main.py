@@ -242,3 +242,48 @@ def run_performance_benchmark(filters_dict):
         op_count = N * N
 
         print(f"{f'{N}×{N}':<10} {avg_time_ms:<15.3f} {op_count:<10}")
+
+def print_summary_report(results):
+    total = len(results)
+    passed = sum(1 for r in results if r["status"] == "PASS")
+    failed = total - passed
+
+    print("\n#---------------------------------------")
+    print("# [4] 결과 요약")
+    print("#---------------------------------------")
+    print(f"총 테스트: {total}개")
+    print(f"통과: {passed}개")
+    print(f"실패: {failed}개")
+
+    fail_cases = [r for r in results if r["status"] == "FAIL"]
+    if fail_cases:
+        print("\n실패 케이스:")
+        for fc in fail_cases:
+            print(f"- {fc['id']}: {fc['reason']}")
+    else:
+        print("\n모든 케이스가 성공적으로 통과되었습니다.")
+
+def run_mode_2():
+    data = load_json_data("data.json")
+    if not data:
+        return
+    results, filters_dict = process_data_json_cases(data)
+    run_performance_benchmark(filters_dict)
+    print_summary_report(results)
+
+def main():
+    print("=== Mini NPU Simulator ===")
+    print("\n[모드 선택]")
+    print("1. 사용자 입력 (3x3)")
+    print("2. data.json 분석")
+    
+    choice = input("선택: ").strip()
+    if choice == '1':
+        run_mode_1()
+    elif choice == '2':
+        run_mode_2()
+    else:
+        print("잘못된 선택입니다. 프로그램을 종료합니다.")
+
+if __name__ == "__main__":
+    main()
