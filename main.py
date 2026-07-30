@@ -332,6 +332,32 @@ def compare_memory_optimization(filters_dict):
 
         print(f"{f'{N}×{N}':<10} {time_2d_ms:<15.4f} {time_1d_ms:<15.4f} {improvement:>6.1f}%")
 
+def generate_pattern(N, pattern_type="Cross"):
+    """
+    크기 N에 대해 N x N 크기의 Cross(+) 또는 X 패턴 행렬을 자동으로 생성합니다.
+    - 1.0: 패턴 부위, 0.0: 배경
+    """
+    # 0.0으로 초기화
+    matrix = [[0.0] * N for _ in range(N)]
+
+    if pattern_type.lower() in ["cross", "+"]:
+        mid = N // 2
+        for r in range(N):
+            for c in range(N):
+                if r == mid or c == mid:
+                    matrix[r][c] = 1.0
+                # N이 짝수인 경우 중앙 2줄 처리
+                if N % 2 == 0:
+                    if r == mid - 1 or c == mid - 1:
+                        matrix[r][c] = 1.0
+
+    elif pattern_type.lower() in ["x"]:
+        for i in range(N):
+            matrix[i][i] = 1.0              # 주 대각선
+            matrix[i][N - 1 - i] = 1.0      # 부 대각선
+
+    return matrix
+
 def main():
     print("=== Mini NPU Simulator ===")
     print("\n[모드 선택]")
