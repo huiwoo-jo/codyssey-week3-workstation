@@ -271,6 +271,25 @@ def run_mode_2():
     run_performance_benchmark(filters_dict)
     print_summary_report(results)
 
+def flatten_matrix(matrix_2d):
+    """
+    2차원 리스트(N x N)를 1차원 리스트(N^2)로 평탄화합니다.
+    """
+    flat = []
+    for row in matrix_2d:
+        flat.extend(row)
+    return flat
+
+def compute_mac_1d(pattern_1d, filter_1d):
+    """
+    1차원 리스트 메모리 접근 패턴을 사용하여 MAC 연산을 수행합니다.
+    (인덱스 산출 오버헤드 없이 단일 루프 순회)
+    """
+    score = 0.0
+    for i in range(len(pattern_1d)):
+        score += float(pattern_1d[i]) * float(filter_1d[i])
+    return score
+
 def main():
     print("=== Mini NPU Simulator ===")
     print("\n[모드 선택]")
