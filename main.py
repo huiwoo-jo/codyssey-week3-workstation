@@ -211,3 +211,34 @@ def process_data_json_cases(data):
         })
 
     return results, filters_dict
+
+def run_performance_benchmark(filters_dict):
+    print("\n#---------------------------------------")
+    print("# [3] 성능 분석 (평균/10회)")
+    print("#---------------------------------------")
+    print(f"{'크기':<10} {'평균 시간(ms)':<15} {'연산 횟수':<10}")
+    print("-" * 40)
+
+    # 3x3 임의 데이터 추가 포함 (요구사항)
+    test_sizes = [3, 5, 13, 25]
+    iterations = 10
+
+    for N in test_sizes:
+        filter_key = f"size_{N}"
+        if filter_key in filters_dict:
+            f_matrix = filters_dict[filter_key]["cross"]
+            p_matrix = f_matrix # 동일한 N x N 크기로 테스트
+        else:
+            # 3x3 예시 생성
+            f_matrix = [[1.0]*N for _ in range(N)]
+            p_matrix = [[1.0]*N for _ in range(N)]
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = compute_mac(p_matrix, f_matrix)
+        end_time = time.perf_counter()
+
+        avg_time_ms = ((end_time - start_time) / iterations) * 1000.0
+        op_count = N * N
+
+        print(f"{f'{N}×{N}':<10} {avg_time_ms:<15.3f} {op_count:<10}")
