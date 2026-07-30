@@ -290,6 +290,48 @@ def compute_mac_1d(pattern_1d, filter_1d):
         score += float(pattern_1d[i]) * float(filter_1d[i])
     return score
 
+def compare_memory_optimization(filters_dict):
+    """
+    2차원 배열과 1차원 배열의 MAC 연산 성능을 동일 반복 횟수(100회)로 비교합니다.
+    """
+    print("\n#---------------------------------------")
+    print("# [추가 과제 1] 메모리 접근 최적화 성능 비교 (100회 반복)")
+    print("#---------------------------------------")
+    print(f"{'크기':<10} {'2차원 연산(ms)':<15} {'1차원 연산(ms)':<15} {'개선율':<10}")
+    print("-" * 55)
+
+    test_sizes = [3, 5, 13, 25]
+    iterations = 100
+
+    for N in test_sizes:
+        filter_key = f"size_{N}"
+        if filter_key in filters_dict:
+            f_2d = filters_dict[filter_key]["cross"]
+        else:
+            f_2d = [[1.0] * N for _ in range(N)]
+        p_2d = f_2d  # 동일 입력 테스트
+
+        # 1차원 변환
+        f_1d = flatten_matrix(f_2d)
+        p_1d = flatten_matrix(p_2d)
+
+        # 2차원 연산 시간 측정
+        start_2d = time.perf_counter()
+        for _ in range(iterations):
+            _ = compute_mac(p_2d, f_2d)
+        time_2d_ms = ((time.perf_counter() - start_2d) / iterations) * 1000.0
+
+        # 1차원 연산 시간 측정
+        start_1d = time.perf_counter()
+        for _ in range(iterations):
+            _ = compute_mac_1d(p_1d, f_1d)
+        time_1d_ms = ((time.perf_counter() - start_1d) / iterations) * 1000.0
+
+        # 개선율 계산 (%)
+        improvement = ((time_2d_ms - time_1d_ms) / time_2d_ms) * 100.0
+
+        print(f"{f'{N}×{N}':<10} {time_2d_ms:<15.4f} {time_1d_ms:<15.4f} {improvement:>6.1f}%")
+
 def main():
     print("=== Mini NPU Simulator ===")
     print("\n[모드 선택]")
