@@ -105,8 +105,32 @@ I/O 시간을 제외한 **순수 MAC 연산 시간**을 100회 반복 측정하�
 * 두 점수의 차이(`abs(score_cross - score_x)`)가 설정된 임계값 `EPSILON (1e-9)` 이내에 포함되어 시스템이 안전 장치로 `UNDECIDED`로 판정
 * 기댓값(`expected`)은 `"x"`로 지정되어 있으나 `UNDECIDED != X` 조건으로 인해 최종 결과가 `FAIL`로 처리되었습니다. 이는 **부동소수점 미세 오차 시 안전 판정 정책이 의도대로 동작함**을 입증
 
+<br/>
+
 ## 7. 예외 처리 및 안정성 정책
 
 1. **입력 형식 검증:** 콘솔 입력 시 숫자가 아니거나 3x3 규격에 맞지 않는 입력이 들어올 경우 오류 안내 문구를 출력하고 재입력을 유도합니다.
 2. **행렬 차원 불일치 방지:** JSON 데이터 분석 시 정의된 크기 $N$과 실제 행렬의 행/열 길이가 일치하지 않으면 에러로 프로그램을 중단하지 않고 해당 케이스만 `FAIL` 처리 후 계속 진행합니다.
 3. **부동소수점 비교 안전성:** 오차범위 `1e-9`를 적용하여 부동소수점 표현 한계로 인한 오판정을 방지합니다.
+
+<br/>
+
+## 8. 실행 결과
+### [MODE 1] 사용자 직접 입력 (3x3)
+#### [A 필터]
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/4274b879-172d-4e08-be4c-1cd6fc8435ff" />
+
+#### [B 필터]
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/c7e97f33-ed98-4625-a27f-eed77a2b789b" />
+
+
+### [MODE2] data.json 일괄 분석 및 성능 벤치마크
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/a59476c9-8a94-4330-a07f-b35d32f4438f" />
+
+
+### [MDOE 3] N x N 패턴 자동 생성기
+#### 1. 생성된 패턴으로 MAC 연산 및 유사도 판정 (모드 1 재활용)
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/e2d58e4b-218d-4fe0-876c-c76d2b472329" />
+
+#### 2. 생성된 패턴으로 1D vs 2D 메모리 성능 벤치마크 (성능 분석 재활용)
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/2624f303-477e-426a-a02f-8ea030cd8694" />
