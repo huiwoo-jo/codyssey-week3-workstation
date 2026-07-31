@@ -1,8 +1,8 @@
-# codyssey-week2-workstation
+# codyssey-week3-workstation
 
 ## 1. 프로젝트 개요
 
-- **코디세이 AI 입학 연수 2기 2주차**
+- **코디세이 AI 입학 연수 2기 3주차**
 - **Mission E01-3** AI가 계산하는 방식을 흉내 내는 작은 계산기 만들기
 
 <br/>
