@@ -1,15 +1,20 @@
+# modes.py
+
 import time
 import json
+from utils import (
+    normalize_label,
+    validate_dimensions,
+    generate_pattern
+)
+
 from mac_ops import (
     compute_mac,
     compute_mac_1d,
     flatten_matrix,
     decide_winner,
-    normalize_label,
-    validate_dimensions,
     EPSILON
 )
-from utils import generate_pattern
 
 # ------------------------------------------
 # [모드 1] 사용자 직접 입력 테스트 (3x3)
