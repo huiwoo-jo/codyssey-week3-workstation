@@ -205,10 +205,10 @@ def run_mode_2():
 
 def run_mode_pattern_generator():
     print("\n#---------------------------------------")
-    print("# [추가 과제] N x N 패턴 자동 생성기")
+    print("# [추가 과제] N x N 패턴 자동 생성기 & 재활용")
     print("#---------------------------------------")
     try:
-        N = int(input("생성할 패턴 크기 N 입력 (예: 5): ").strip())
+        N = int(input("생성할 패턴 크기 N 입력 (예: 10): ").strip())
         if N < 3:
             print("크기 N은 3 이상이어야 합니다.")
             return
@@ -216,19 +216,54 @@ def run_mode_pattern_generator():
         print("올바른 숫자를 입력하세요.")
         return
 
-    cross_p = generate_pattern(N, "Cross")
-    x_p = generate_pattern(N, "X")
+    # 1. 패턴 및 기본 필터 동적 생성
+    generated_pattern = generate_pattern(N, "Cross")
+    cross_filter = generate_pattern(N, "Cross")
+    x_filter = generate_pattern(N, "X")
 
-    print(f"\n[생성된 {N}x{N} Cross 패턴]")
-    for row in cross_p:
-        print(" ".join(f"{int(v)}" for v in row))
+    print(f"\n✓ {N}x{N} 크기의 패턴 및 필터가 성공적으로 생성되었습니다.")
 
-    print(f"\n[생성된 {N}x{N} X 패턴]")
-    for row in x_p:
-        print(" ".join(f"{int(v)}" for v in row))
+    # 2. 재활용 메뉴 선택
+    print("\n[생성된 패턴 재활용 옵션]")
+    print("1. 생성된 패턴으로 MAC 연산 및 유사도 판정 (모드 1 재활용)")
+    print("2. 생성된 패턴으로 1D vs 2D 메모리 성능 벤치마크 (성능 분석 재활용)")
+    print("3. 메인 메뉴로 복귀")
+    
+    sub_choice = input("선택: ").strip()
 
-    score_self = compute_mac(cross_p, cross_p)
-    score_cross_x = compute_mac(cross_p, x_p)
-    print(f"\n- 생성된 Cross 패턴 vs Cross 필터 MAC 점수: {score_self}")
-    print(f"- 생성된 Cross 패턴 vs X 필터 MAC 점수    : {score_cross_x}")
-    print(f"- 판정 결과                             : {decide_winner(score_self, score_cross_x)}")
+    if sub_choice == '1':
+        # --- 모드 1 로직 재활용 ---
+        score_cross = compute_mac(generated_pattern, cross_filter)
+        score_x = compute_mac(generated_pattern, x_filter)
+        winner = decide_winner(score_cross, score_x)
+        
+        print("\n# [재활용 결과: MAC 연산 & 판정]")
+        print(f"- Cross 필터 점수: {score_cross}")
+        print(f"- X 필터 점수    : {score_x}")
+        print(f"- 최종 판정 결과 : {winner}")
+
+    elif sub_choice == '2':
+        # --- 성능 분석 로직 재활용 ---
+        print(f"\n# [재활용 결과: {N}x{N} 크기 1D vs 2D 성능 벤치마크 (100회 평균)]")
+        
+        f_1d = flatten_matrix(cross_filter)
+        p_1d = flatten_matrix(generated_pattern)
+
+        iterations = 100
+        # 2D 측정
+        t0 = time.perf_counter()
+        for _ in range(iterations):
+            _ = compute_mac(generated_pattern, cross_filter)
+        t_2d_ms = ((time.perf_counter() - t0) / iterations) * 1000.0
+
+        # 1D 측정
+        t1 = time.perf_counter()
+        for _ in range(iterations):
+            _ = compute_mac_1d(p_1d, f_1d)
+        t_1d_ms = ((time.perf_counter() - t1) / iterations) * 1000.0
+
+        improvement = ((t_2d_ms - t_1d_ms) / t_2d_ms) * 100.0 if t_2d_ms > 0 else 0.0
+        
+        print(f"2차원 연산 시간: {t_2d_ms:.4f} ms")
+        print(f"1차원 연산 시간: {t_1d_ms:.4f} ms")
+        print(f"메모리 최적화 개선율: {improvement:.1f}%")
