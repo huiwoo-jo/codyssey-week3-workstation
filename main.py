@@ -1,6 +1,8 @@
 # main.py
 
-from modes import run_mode_1, run_mode_2, run_mode_pattern_generator
+from modes.mode_data_json import run_data_json
+from modes.mode_input_user import run_input_user
+from modes.mode_pattern_generator import run_pattern_generator
 
 def main():
     # 모드 안내
@@ -13,13 +15,14 @@ def main():
     # 모드 선택
     choice = input("선택: ").strip()
     if choice == '1':
-        run_mode_1()
+        run_input_user()
     elif choice == '2':
-        run_mode_2()
+        run_data_json()
     elif choice == '3':
-        run_mode_pattern_generator()
+        run_pattern_generator()
     else:
         print("잘못된 선택입니다.")
-
+            
+        
 if __name__ == "__main__":
     main()

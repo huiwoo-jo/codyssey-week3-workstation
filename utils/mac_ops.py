@@ -1,4 +1,4 @@
-# mac_ops.py
+# utils/mac_ops.py
 
 # 부동 소수점 오차 기준 보정
 EPSILON = 1e-9
