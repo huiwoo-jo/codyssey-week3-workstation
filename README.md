@@ -10,8 +10,10 @@
 ## 2. 실행 환경 및 실행 방법
 
 ### 실행 환경
+- **Platform:** VSCode 1.92.2
 - **Language:** Python 3.14.6
-- **Database/Dataset:** JSON (`data.json`)
+- **Database/Dataset:** JSON (`state.json`)
+- **Version Control:** Git v2.46.2
 
 ### 실행 방법
 
