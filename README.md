@@ -62,13 +62,19 @@ python main.py
 ## 5. 파일 및 디렉토리 구조
 
 ```text
-npu_project/
-├── mac_ops.py      # 순수 수학 연산 및 NPU 하드웨어 모사 전담
-├── modes.py        # 모드별(사용자 입력, json 일괄분석, 패턴 생성기) 실행 함수
-├── utils.py        # 데이터 전처리, 검증 및 동적 생성 전담
-├── main.py         # 프로그램 진입점 (CLI 메뉴)
-├── data.json       # 필터 및 테스트 패턴 데이터셋
-└── README.md       # 프로젝트 설명서
+CODYSSEY-WEEK3-WORKSTATION/
+├── modes/                           # NPU 시뮬레이터 모드별 실행 로직 디렉토리
+│   ├── mode_data_json.py            # [모드 2] data.json 기반 패턴 분석, 유효성 검증 & 1D/2D 성능 벤치마크
+│   ├── mode_input_user.py           # [모드 1] 사용자 인터랙티브 직접 입력 기반 MAC 연산 및 패턴 분류
+│   └── mode_pattern_generator.py    # [모드 3] N x N 크기별 동적 패턴 자동 생성 및 성능 실시간 분석
+├── utils/                           # 공통 연산 엔진 및 헬퍼 모듈 디렉토리
+│   ├── mac_ops.py                   # NPU 핵심 연산(2D/1D MAC, 승자 판정 decide_winner, 평탄화)
+│   └── utils.py                     # 패턴 생성, 차원 검증 및 터미널 시각화 헬퍼
+├── .gitattributes                   # Git 속성 관리 설정 파일
+├── .gitignore                       # Git 추적 제외 파일 (__pycache__, 환경변수 등)
+├── data.json                        # 크기별(3, 5, 13, 25) 필터 및 테스트 패턴 데이터셋
+├── main.py                          # NPU 시뮬레이터 실행 Entry Point 및 메인 메뉴 루프
+└── README.md                        # 프로젝트 설명 및 매뉴얼 문서
 ```
 
 <br/>
