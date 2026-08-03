@@ -27,7 +27,7 @@ def run_pattern_generator():
 
     # 1. 크기 입력
     try:
-        N = int(input("생성할 필터 및 입력 크기 N 입력 (예: 5): ").strip())
+        N = int(input("생성할 필터 및 입력 크기 N 입력 (3 이상의 숫자를 입력하세요): ").strip())
         if N < 3:
             print("크기 N은 3 이상이어야 합니다.")
             return
@@ -43,12 +43,11 @@ def run_pattern_generator():
     display_matrix_terminal(cross_filter, name=f"생성된 {N}x{N} Cross 필터")
     display_matrix_terminal(x_filter, name=f"생성된 {N}x{N} X 필터")
 
-    # 3. 재활용 모드 선택
-    print("\n[재활용 모드 선택]")
+    # 3. 모드 선택
     print(
-        f"1. {N}x{N} 사용자 입력 데이터 받기 및 필터 비교 (모드 1 재활용)"
+        f"1. {N}x{N} 사용자 입력 데이터 받기 및 필터 비교"
     )
-    print(f"2. {N}x{N} 1D vs 2D 메모리 성능 분석 (성능 분석 재활용)")
+    print(f"2. {N}x{N} 1D vs 2D 메모리 성능 분석")
     print("3. 메인 메뉴로 복귀")
 
     choice = input("선택: ").strip()
@@ -58,6 +57,7 @@ def run_pattern_generator():
         print(f"\n[4. {N}x{N} 사용자 입력 데이터 준비]")
         print("1) 테스트용 N x N Cross 입력 데이터 사용")
         print("2) 테스트용 N x N X 입력 데이터 사용")
+
         # N이 작을 경우 직접 타이핑 입력을 허용하도록 확장 가능
         input_type = input("입력 패턴 선택 (1 또는 2): ").strip()
 
@@ -86,7 +86,7 @@ def run_pattern_generator():
 
     elif choice == "2":
         # 성능 분석 방식 재활용 (N x N 입력 데이터와 생성된 필터 활용)
-        print(f"\n[4. {N}x{N} 성능 분석용 입력 데이터 자동 설정]")
+        print(f"\n[{N}x{N} 성능 분석용 입력 데이터 자동 설정]")
         user_input_matrix = generate_pattern(N, "Cross")
 
         print(
