@@ -10,7 +10,7 @@
 ## 2. 실행 환경 및 실행 방법
 
 ### 실행 환경
-- **Language:** Python 3.8 이상 (별도의 외부 패키지 설치 필요 없음)
+- **Language:** Python 3.14.6
 - **Database/Dataset:** JSON (`data.json`)
 
 ### 실행 방법
@@ -140,8 +140,16 @@ I/O 시간을 제외한 **순수 MAC 연산 시간**을 100회 반복 측정하�
 
 
 ### [MDOE 3] N x N 패턴 자동 생성기
-#### 1. 생성된 패턴으로 MAC 연산 및 유사도 판정 (모드 1 재활용)
-<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/e2d58e4b-218d-4fe0-876c-c76d2b472329" />
+#### [필터 자동 생성]
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/4851da26-a054-4ffb-bd92-f8ccb87b3357" />
 
-#### 2. 생성된 패턴으로 1D vs 2D 메모리 성능 벤치마크 (성능 분석 재활용)
-<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/2624f303-477e-426a-a02f-8ea030cd8694" />
+#### 1. 5x5 사용자 입력 데이터 받기 및 필터 비교
+#### 1-1. 테스트용 N x N Cross 입력 데이터 사용
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/6d61f3c4-4cc8-483a-ae19-ad98aa8428bb" />
+
+#### 1-2. 테스트용 N x N X 입력 데이터 사용
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/ced738ad-e400-4a25-8e69-7d48bae3f556" />
+
+### 2. 5x5 1D vs 2D 메모리 성능 분석
+<img width="1470" height="923" alt="image" src="https://github.com/user-attachments/assets/11ce3dd4-2427-407c-934f-53afdfcdced9" />
+
